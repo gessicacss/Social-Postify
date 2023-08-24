@@ -7,25 +7,39 @@ import { PrismaService } from '../prisma/prisma.service';
 export class MediasRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createMediaDto: CreateMediaDto) {
-    console.log(createMediaDto);
-    return 'This action adds a new media';
+  async create(data: CreateMediaDto) {
+    return await this.prisma.media.create({ data });
   }
 
-  findAll() {
-    return `This action returns all medias`;
+  async findAll() {
+    return this.prisma.media.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} media`;
+  async findMediaById(id: number) {
+    return await this.prisma.media.findFirst({ where: { id } });
   }
 
-  update(id: number, updateMediaDto: UpdateMediaDto) {
-    console.log(updateMediaDto);
-    return `This action updates a #${id} media`;
+  async findMediaByData(title: string, username: string) {
+    return await this.prisma.media.findFirst({
+      where: {
+        title,
+        AND: {
+          username,
+        },
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} media`;
+  async update(id: number, data: UpdateMediaDto) {
+    return await this.prisma.media.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
+
+  async remove(id: number) {
+    return await this.prisma.media.delete({ where: { id } });
   }
 }
