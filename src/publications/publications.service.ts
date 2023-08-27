@@ -32,13 +32,12 @@ export class PublicationsService {
     return await this.publicationsRepository.create(createPublicationDto);
   }
 
-  async findAll(published: boolean | null, after: string | null) {
-    let currentDate: Date = null;
-    if (published) {
-      currentDate = new Date();
-    }
+  async findAll(published: string | null, after: string | null) {
+    // const isItPublished =
+    //   published === true ? 'true' : published === false ? 'false' : undefined;
+
     const publications = await this.publicationsRepository.findAll(
-      currentDate,
+      published,
       after,
     );
     return publications;

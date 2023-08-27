@@ -23,7 +23,7 @@ export class PublicationsController {
 
   @Get()
   findAll(
-    @Query('published') published: boolean | null,
+    @Query('published') published: string | null,
     @Query('after') after: string | null,
   ) {
     return this.publicationsService.findAll(published, after);

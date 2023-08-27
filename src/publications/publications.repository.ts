@@ -11,11 +11,14 @@ export class PublicationsRepository {
     return await this.prisma.publication.create({ data });
   }
 
-  async findAll(currentDate: Date | null, after: string | null) {
+  async findAll(published: string | null, after: string | null) {
+    const currentDate = new Date();
+
     return await this.prisma.publication.findMany({
       where: {
         date: {
-          lt: currentDate ? currentDate : undefined,
+          lt: published === 'true' ? currentDate : undefined,
+          gt: published === 'false' ? currentDate : undefined,
           gte: after ? new Date(after) : undefined,
         },
       },
