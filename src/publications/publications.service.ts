@@ -33,9 +33,6 @@ export class PublicationsService {
   }
 
   async findAll(published: string | null, after: string | null) {
-    // const isItPublished =
-    //   published === true ? 'true' : published === false ? 'false' : undefined;
-
     const publications = await this.publicationsRepository.findAll(
       published,
       after,
