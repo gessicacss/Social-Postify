@@ -8,11 +8,11 @@ export class MediasRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateMediaDto) {
-    return await this.prisma.media.create({ data });
+    return this.prisma.media.create({ data });
   }
 
   async findAll() {
-    return this.prisma.media.findMany();
+    return await this.prisma.media.findMany();
   }
 
   async findMediaById(id: number) {
@@ -35,7 +35,10 @@ export class MediasRepository {
       where: {
         id,
       },
-      data,
+      data: {
+        ...data,
+        updatedAt: new Date(Date.now()),
+      },
     });
   }
 
