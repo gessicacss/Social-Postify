@@ -7,25 +7,49 @@ import { PrismaService } from '../prisma/prisma.service';
 export class PublicationsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createPublicationDto: CreatePublicationDto) {
-    console.log(createPublicationDto);
-    return 'This action adds a new publication';
+  async create(data: CreatePublicationDto) {
+    return await this.prisma.publication.create({ data });
   }
 
-  findAll() {
-    return `This action returns all publications`;
+  async findAll(currentDate: Date | null, after: string | null) {
+    return await this.prisma.publication.findMany({
+      where: {
+        date: {
+          lt: currentDate ? currentDate : undefined,
+          gte: after ? new Date(after) : undefined,
+        },
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} publication`;
+  async findOne(id: number) {
+    return await this.prisma.publication.findFirst({ where: { id } });
   }
 
-  update(id: number, updatePublicationDto: UpdatePublicationDto) {
-    console.log(updatePublicationDto);
-    return `This action updates a #${id} publication`;
+  async findByData(mediaId: number, postId: number) {
+    return await this.prisma.publication.findFirst({
+      where: {
+        mediaId,
+        AND: {
+          postId,
+        },
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} publication`;
+  async update(id: number, data: UpdatePublicationDto) {
+    return await this.prisma.publication.update({
+      where: {
+        id,
+      },
+      data: {
+        ...data,
+        updatedAt: new Date(Date.now()),
+      },
+    });
+  }
+
+  async remove(id: number) {
+    return await this.prisma.publication.delete({ where: { id } });
   }
 }

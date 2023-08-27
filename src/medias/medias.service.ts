@@ -1,15 +1,20 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
 import { MediasRepository } from './medias.repository';
+import { PublicationsRepository } from '../publications/publications.repository';
 
 @Injectable()
 export class MediasService {
-  constructor(private readonly mediasRepository: MediasRepository) {}
+  constructor(
+    private readonly mediasRepository: MediasRepository,
+    private readonly publicationsRepository: PublicationsRepository,
+  ) {}
 
   async create(createMediaDto: CreateMediaDto) {
     const { title, username } = createMediaDto;
@@ -57,6 +62,13 @@ export class MediasService {
     if (!mediaExists) {
       throw new NotFoundException('Theres no media with this id');
     }
-    return await this.mediasRepository.remove(id);
+
+    const publicationExists = this.publicationsRepository.findOne(id);
+    if (publicationExists) {
+      throw new ForbiddenException('Theres a publication with this post!');
+    }
+
+    await this.mediasRepository.remove(id);
+    return 'Media deleted!';
   }
 }

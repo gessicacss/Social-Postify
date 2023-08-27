@@ -42,4 +42,6 @@ model Publication {
   date DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("publications")
 }
