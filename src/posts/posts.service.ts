@@ -33,12 +33,10 @@ export class PostsService {
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {
-    console.log(updatePostDto);
     const post = await this.postsRepository.findOne(id);
     if (!post) {
       throw new NotFoundException('Theres no post with this id');
     }
-
     return await this.postsRepository.update(id, updatePostDto);
   }
 

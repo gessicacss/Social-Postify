@@ -189,6 +189,19 @@ describe('AppController (e2e)', () => {
       );
     });
 
+    it('PUT /posts/:id should update post with this id', async () => {
+      const post = await PostFactory.build(prisma);
+      const newData = {
+        title: 'hi I just updated this!',
+        text: 'and this too!!',
+      };
+
+      const response = await request(app.getHttpServer())
+        .put(`/posts/${post.id}`)
+        .send(newData);
+      expect(response.statusCode).toBe(HttpStatus.OK);
+    });
+
     it('DELETE /posts/:id should delete posts with this id', async () => {
       const post = await PostFactory.build(prisma);
 

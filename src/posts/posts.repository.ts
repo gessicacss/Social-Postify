@@ -20,7 +20,7 @@ export class PostsRepository {
   }
 
   async update(id: number, data: UpdatePostDto) {
-    return await this.prisma.media.update({
+    return await this.prisma.post.update({
       where: {
         id,
       },
