@@ -33,6 +33,7 @@ export class PostsService {
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {
+    console.log(updatePostDto);
     const post = await this.postsRepository.findOne(id);
     if (!post) {
       throw new NotFoundException('Theres no post with this id');
@@ -47,12 +48,12 @@ export class PostsService {
       throw new NotFoundException('Theres no post with this id');
     }
 
-    const publicationExists = this.publicationsRepository.findOne(id);
+    const publicationExists =
+      await this.publicationsRepository.findByPostId(id);
     if (publicationExists) {
       throw new ForbiddenException('Theres a publication with this post!');
     }
 
-    await this.postsRepository.remove(id);
-    return 'Post deleted!';
+    return await this.postsRepository.remove(id);
   }
 }

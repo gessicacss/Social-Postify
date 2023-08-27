@@ -63,12 +63,12 @@ export class MediasService {
       throw new NotFoundException('Theres no media with this id');
     }
 
-    const publicationExists = this.publicationsRepository.findOne(id);
+    const publicationExists =
+      await this.publicationsRepository.findByMediaId(id);
     if (publicationExists) {
       throw new ForbiddenException('Theres a publication with this post!');
     }
 
-    await this.mediasRepository.remove(id);
-    return 'Media deleted!';
+    return await this.mediasRepository.remove(id);
   }
 }

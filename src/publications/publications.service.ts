@@ -84,7 +84,6 @@ export class PublicationsService {
     if (!publication) {
       throw new NotFoundException('Theres no media with this id');
     }
-    await this.publicationsRepository.remove(id);
-    return 'Publication deleted!';
+    return await this.publicationsRepository.remove(id);
   }
 }

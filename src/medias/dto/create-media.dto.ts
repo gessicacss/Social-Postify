@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateMediaDto {
   @IsString()
   @IsNotEmpty({ message: 'Field should not be empty!' })
   title: string;
 
-  @IsUrl()
+  @IsString()
   @IsNotEmpty({ message: 'Field should not be empty!' })
   username: string;
 }

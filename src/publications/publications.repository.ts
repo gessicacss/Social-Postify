@@ -29,6 +29,22 @@ export class PublicationsRepository {
     return await this.prisma.publication.findFirst({ where: { id } });
   }
 
+  async findByPostId(postId: number) {
+    return await this.prisma.publication.findFirst({
+      where: {
+        postId,
+      },
+    });
+  }
+
+  async findByMediaId(mediaId: number) {
+    return await this.prisma.publication.findFirst({
+      where: {
+        mediaId,
+      },
+    });
+  }
+
   async findByData(mediaId: number, postId: number) {
     return await this.prisma.publication.findFirst({
       where: {
