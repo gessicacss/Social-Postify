@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HttpStatus, INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { MediaFactory } from './factories/media.factory';
 import { PostFactory } from './factories/post.factory';
 import { PublicationFactory } from './factories/publication.factory';
+import { faker } from '@faker-js/faker';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -20,6 +21,7 @@ describe('AppController (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
     prisma = await moduleFixture.get(PrismaService);
     await prisma.publication.deleteMany();
     await prisma.media.deleteMany();
@@ -36,6 +38,13 @@ describe('AppController (e2e)', () => {
   });
 
   describe('Media tests', () => {
+    it('POST /medias should be invalid without a field', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/medias')
+        .send({ title: '', username: '' });
+      expect(response.statusCode).toBe(HttpStatus.BAD_REQUEST);
+    });
+
     it('POST /medias should post a media', async () => {
       const media = {
         title: 'test',
@@ -52,6 +61,12 @@ describe('AppController (e2e)', () => {
           username: expect.any(String),
         }),
       );
+    });
+
+    it('GET /medias should send a empty array', async () => {
+      const response = await request(app.getHttpServer()).get('/medias');
+      expect(response.statusCode).toBe(HttpStatus.OK);
+      expect(response.body).toEqual([]);
     });
 
     it('GET /medias should get medias', async () => {
@@ -129,6 +144,13 @@ describe('AppController (e2e)', () => {
   });
 
   describe('Posts tests', () => {
+    it('POST /posts should be invalid without a field', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/posts')
+        .send({ title: '', text: '' });
+      expect(response.statusCode).toBe(HttpStatus.BAD_REQUEST);
+    });
+
     it('POST /posts should post a posts', async () => {
       const postData = {
         title: 'my title',
@@ -149,6 +171,12 @@ describe('AppController (e2e)', () => {
           updatedAt: expect.any(String),
         }),
       );
+    });
+
+    it('GET /posts should send a empty array', async () => {
+      const response = await request(app.getHttpServer()).get('/posts');
+      expect(response.statusCode).toBe(HttpStatus.OK);
+      expect(response.body).toEqual([]);
     });
 
     it('GET /posts should get posts', async () => {
@@ -223,6 +251,13 @@ describe('AppController (e2e)', () => {
   });
 
   describe('Publications tests', () => {
+    it('POST /publications should be invalid without a field', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/publications')
+        .send({ mediaId: '', postId: '', date: '' });
+      expect(response.statusCode).toBe(HttpStatus.BAD_REQUEST);
+    });
+
     it('POST /publications should post a publication', async () => {
       const media = await MediaFactory.build(prisma);
       const post = await PostFactory.build(prisma);
@@ -240,6 +275,12 @@ describe('AppController (e2e)', () => {
           date: expect.any(String),
         }),
       );
+    });
+
+    it('GET /posts should send a empty array', async () => {
+      const response = await request(app.getHttpServer()).get('/publications');
+      expect(response.statusCode).toBe(HttpStatus.OK);
+      expect(response.body).toEqual([]);
     });
 
     it('GET /publications should get publications', async () => {
