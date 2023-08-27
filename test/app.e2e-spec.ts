@@ -129,7 +129,7 @@ describe('AppController (e2e)', () => {
   });
 
   describe('Posts tests', () => {
-    it('POST /posts should post a media', async () => {
+    it('POST /posts should post a posts', async () => {
       const postData = {
         title: 'my title',
         text: 'my text',
@@ -151,7 +151,7 @@ describe('AppController (e2e)', () => {
       );
     });
 
-    it('GET /posts should get medias', async () => {
+    it('GET /posts should get posts', async () => {
       await PostFactory.build(prisma);
 
       const response = await request(app.getHttpServer()).get('/posts');
@@ -170,7 +170,7 @@ describe('AppController (e2e)', () => {
       );
     });
 
-    it('GET /posts/:id should get media by id', async () => {
+    it('GET /posts/:id should get posts by id', async () => {
       const post = await PostFactory.build(prisma);
 
       const response = await request(app.getHttpServer()).get(
@@ -189,7 +189,7 @@ describe('AppController (e2e)', () => {
       );
     });
 
-    it('DELETE /posts/:id should delete media with this id', async () => {
+    it('DELETE /posts/:id should delete posts with this id', async () => {
       const post = await PostFactory.build(prisma);
 
       const response = await request(app.getHttpServer()).delete(
