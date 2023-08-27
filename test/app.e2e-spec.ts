@@ -277,7 +277,7 @@ describe('AppController (e2e)', () => {
       );
     });
 
-    it('GET /posts should send a empty array', async () => {
+    it('GET /publications should send a empty array', async () => {
       const response = await request(app.getHttpServer()).get('/publications');
       expect(response.statusCode).toBe(HttpStatus.OK);
       expect(response.body).toEqual([]);
